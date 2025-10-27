@@ -24,9 +24,9 @@
     * Go to **Settings > About Phone** and tap **Build Number seven times** to enable Developer Options.
     * Go to **Settings > Developer Options** and enable **USB Debugging**.
 
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/de2d7c56c138c87d4745d2dbaf512dc4e2beaedc/images/7.1.png)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/IMG-20251027-WA0030.jpg)
 
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/de2d7c56c138c87d4745d2dbaf512dc4e2beaedc/images/7.3.png)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/IMG-20251027-WA0034.jpg)
 ---
 
 ### Step 2: Connect the Android Device to Your Computer
@@ -40,7 +40,7 @@
         ```
     * **Verification:** The device should be listed, confirming that the ADB connection is ready.
    
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/7bc2c6c9cc6dd5cdd9401ae3781aa66e70193dde/images/7.13.jpeg)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/IMG-20251027-WA0035.jpg)
 
 ---
 
@@ -52,7 +52,7 @@
         ```bash
         adb install aflogical.apk
         ```
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/de2d7c56c138c87d4745d2dbaf512dc4e2beaedc/images/7.7.png)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/IMG-20251027-WA0033.jpg)
 
 2.  **Launch the AFLogical OSE App on the Device:**
     * On the Android device, open the newly installed AFLogical app.
@@ -62,9 +62,9 @@
     * Select the desired data types (e.g., contacts, SMS, MMS, call logs) from the app's options.
     * The app will start the extraction process, storing the data in **.csv files** on the device’s storage, typically in a directory named `aflogical`.
 
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/de2d7c56c138c87d4745d2dbaf512dc4e2beaedc/images/7.12.jpeg)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/IMG-20251027-WA0031.jpg)
 
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/de2d7c56c138c87d4745d2dbaf512dc4e2beaedc/images/7.11.jpeg)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/IMG-20251027-WA0032.jpg)
 
 ---
 
@@ -75,7 +75,7 @@
         ```bash
         adb pull /sdcard/aflogical /path/to/destination
         ```
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/de2d7c56c138c87d4745d2dbaf512dc4e2beaedc/images/7.8.png)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/IMG-20251027-WA0029.jpg)
 
     * *Note: Replace `/path/to/destination` with the desired save location on your computer.*
 2.  **Verify the Data:**
@@ -90,7 +90,7 @@
 2.  **Review and Document:**
     * Carefully review the data for any relevant evidence or information.
     * Document all findings and prepare a comprehensive report.
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/de2d7c56c138c87d4745d2dbaf512dc4e2beaedc/images/7.9.png)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/IMG-20251027-WA0036.jpg)
 ---
 
 ### Step 6: Clean Up
