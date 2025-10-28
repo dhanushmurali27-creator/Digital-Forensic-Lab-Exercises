@@ -3,7 +3,7 @@
 ### Description
 2.  **Install Sleuth Kit:**
     * Run the installer and follow the instructions to install Sleuth Kit on your Windows machine.
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/8fd82d713c4b7318d0bbd94aa94d85a618efd599/images/6.1.jpeg)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/6.1.jpeg)
 ---
 
 ### Step 2: Acquire the Disk Image
@@ -17,7 +17,7 @@ Before analysis, a **bit-by-bit copy** (disk image) of the storage device eviden
     * Download the following files from the Google Drive:
         * `4Dell Latitude CPi.E01`
         * `4Dell Latitude CPi.E02`
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/8fd82d713c4b7318d0bbd94aa94d85a618efd599/images/6.3.jpeg)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/6.3.jpeg)
 ---
 
 ### Step 3: Mount the Disk Image (Optional)
@@ -43,7 +43,7 @@ Use the Sleuth Kit command-line tools to examine the file system structure and l
         fsstat [image file] > filesystem_info.txt
         ```
     * **Purpose:** This command outputs detailed information about the file system, which is crucial for structural understanding.
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/8fd82d713c4b7318d0bbd94aa94d85a618efd599/images/6.4.jpeg)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/6.4.jpeg)
 3.  **List Partitions with `mmls`:**
     * **Command:**
         ```arduino
@@ -64,7 +64,7 @@ Use the Sleuth Kit command-line tools to examine the file system structure and l
         icat [image file] [inode number] > [output file]
         ```
     * **Purpose:** To extract a specific file, replace `[inode number]` with the inode found from the `fls` output.
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/8fd82d713c4b7318d0bbd94aa94d85a618efd599/images/6.5.jpeg)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/6.5.jpeg)
 ---
 
 ### Step 5: Analyze Metadata
@@ -77,7 +77,7 @@ Extract file metadata to gain insight into a file's history, creation, and usage
         istat [image file] [inode number] > metadata_info.txt
         ```
     * **Purpose:** Provides detailed information about a file, including **timestamps (MAC times)**, size, and allocation status.
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/8fd82d713c4b7318d0bbd94aa94d85a618efd599/images/6.2.jpeg)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/6.2.jpeg)
 ---
 
 ### Step 6: Timeline Analysis
@@ -97,7 +97,7 @@ Creating a timeline of file activity is vital for reconstructing events.
         mactime -b body.txt > timeline.txt
         ```
     * **Purpose:** Processes the body file to create a **timeline** (`timeline.txt`) sorted by the Modified, Accessed, and Changed (MAC) times of the files.
-![images/exp1-disk-step1.png](https://github.com/baddiputi/Digital-Forensic-Lab-Exercises/blob/8fd82d713c4b7318d0bbd94aa94d85a618efd599/images/6.7.jpeg)
+![images/exp1-disk-step1.png](https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/6.6.jpeg)
 ---
 
 ### Step 7: Generate a Report
