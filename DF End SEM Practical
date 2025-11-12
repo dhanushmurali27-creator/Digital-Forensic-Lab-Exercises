@@ -1,0 +1,171 @@
+Digital-Forensics-Lab — 6 Practical Lab Exercises (GitHub-ready)
+1. Lab 1 — PNG LSB Embedding & Detection (zsteg)
+2. Lab 2 — Multi-format Triage with StegSecret
+3. Lab 3 — JPEG Classic Detectors (stegdetect / jsteg / outguess)
+4. Lab 4 — Automated Pipeline: Generate Stego + Run Detectors + Collect Results
+5. Lab 5 — Metrics & Statistical Comparison (TPR / FPR / ROC / McNemar)
+6. Lab 6 — Mini Project: Add Modern ML Detector (CNN or SRM + Ensemble)
+
+Each lab folder contains:
+
+ `README.md` with objectives, expected outputs, step-by-step instructions
+ runnable scripts (Python / Bash) that work inside the provided Docker environment
+ a short `report.md` template for students to fill in results
+
+https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/DF%20END%20SEM/Screenshot%202025-11-12%20170638.png
+
+https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/DF%20END%20SEM/Screenshot%202025-11-12%20170656.png
+digital-forensics-lab/
+├─ README.md
+├─ LICENSE
+├─ Dockerfile
+├─ requirements.txt
+├─ data/ (instructions to download BOSSBase subset)
+├─ lab1_png_lsb/
+├─ lab2_stegsecret/
+├─ lab3_jpeg_detectors/
+├─ lab4_pipeline/
+├─ lab5_metrics/
+└─ lab6_ml_detector/
+Below are the full contents for each lab (README, key scripts). These are ready to paste into their respective files in a GitHub repo.
+Objective:** learn how LSB embedding works in PNGs and how `zsteg` detects/extracts LSB payloads.
+
+Files:
+`README.md` (below)
+`embed_lsb.py` — embed payloads at configurable bpc
+ `run_zsteg.sh` — run zsteg across a folder and collect CSV
+ `report.md` — student report template
+lab1_png_lsb/README.md
+Lab 1 — PNG LSB Embedding & Detection
+Steps:
+1. Place cover PNG images in `covers/` (use BOSSBase subset).  
+2. Run: `python3 embed_lsb.py --covers covers/ --outdir stego/ --payloads 0.05 0.1 0.2`  
+3. Run detector: `bash run_zsteg.sh stego/png_payload_0.100 results/zsteg.csv`  
+4. Inspect results and fill `report.md`.
+Deliverables: confusion matrix, TPR/FPR for each payload, short analysis.
+lab1_png_lsb/embed_lsb.py
+python
+#!/usr/bin/env python3
+from PIL import Image
+import os, argparse, random
+
+def list_images(folder):
+    for f in os.listdir(folder):
+        if f.lower().endswith('.png'):
+            yield os.path.join(folder, f)
+
+def embed_lsb(in_path, out_path, payload_bpc, seed=0):
+    random.seed(seed)
+    im = Image.open(in_path).convert('RGB')
+    w,h = im.size
+    pixels = list(im.getdata())
+    total_bits = w*h*3
+    payload_bits = int(total_bits * payload_bpc)
+    payload = [random.getrandbits(1) for _ in range(payload_bits)]
+    payload_iter = iter(payload)
+    out_pixels = []
+    for (r,g,b) in pixels:
+        nr,ng,nb = r,g,b
+        for idx, val in enumerate((r,g,b)):
+            try:
+                bit = next(payload_iter)
+                val = (val & ~1) | bit
+            except StopIteration:
+                pass
+            if idx==0: nr=val
+            elif idx==1: ng=val
+            else: nb=val
+        out_pixels.append((nr,ng,nb))
+    out = Image.new('RGB', (w,h))
+    out.putdata(out_pixels)
+    out.save(out_path, 'PNG')
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser()
+    p.add_argument('--covers', required=True)
+    p.add_argument('--outdir', required=True)
+    p.add_argument('--payloads', nargs='+', type=float, default=[0.05,0.1,0.2])
+    args=p.parse_args()
+    os.makedirs(args.outdir, exist_ok=True)
+    for payload in args.payloads:
+        od = os.path.join(args.outdir, f'png_payload_{payload:.3f}')
+        os.makedirs(od, exist_ok=True)
+        for f in list_images(args.covers):
+            outf = os.path.join(od, os.path.basename(f))
+            embed_lsb(f, outf, payload)
+    print('Done')
+lab1_png_lsb/run_zsteg.sh
+bash
+#!/usr/bin/env bash
+IMAGEDIR="$1"; OUTCSV="$2"
+if [ -z "$IMAGEDIR" ] || [ -z "$OUTCSV" ]; then echo "Usage: $0 imgdir outcsv"; exit 1; fi
+echo "filename,detected" > "$OUTCSV"
+for f in "$IMAGEDIR"/*.png; do
+  [ -f "$f" ] || continue
+  out=$(zsteg -a "$f" 2>&1)
+  detected=0
+  if echo "$out" | grep -qi "lsb" || echo "$out" | grep -qi "extracted"; then detected=1; fi
+  echo "\"$f\",$detected" >> "$OUTCSV"
+done
+### lab1_png_lsb/report.md
+Lab 1 Report
+- Dataset used: ...
+- Payloads tested: ...
+- Table: payload vs TPR/FPR
+- Short analysis: why zsteg succeeded/failed at low payloads
+Lab 2 — Multi-format Triage with StegSecret
+
+Objective: run StegSecret on PNG/JPEG, interpret multiple test outputs, and compare with zsteg for PNGs.
+
+Files:
+
+ `README.md`
+`run_stegsecret.sh` (automation wrapper)
+ `compare_with_zsteg.py` — merges CSVs and creates side-by-side comparison
+ `report.md`
+Lab 3 — JPEG Classic Detectors (stegdetect / jsteg / outguess)
+
+Objective: learn classic JPEG embedding/detection tools and their limitations.
+
+Files:
+https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/DF%20END%20SEM/Screenshot%202025-11-12%20170709.png
+ `README.md`
+ `prepare_jpeg_stego.sh` — example commands to produce JSteg/OutGuess/Steghide stegofiles (students will need to install these tools)
+ `run_stegdetect.sh` — evaluate stegdetect
+ `report.md`
+
+Include sample commands and expected outputs; emphasize installation notes.
+# Lab 4 — Automated Pipeline (generate stego + run detectors)
+https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/DF%20END%20SEM/Screenshot%202025-11-12%20170720.png
+Objective: build a pipeline that automates dataset creation, runs detectors, and generates a single merged CSV for analysis.
+Files:
+https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/DF%20END%20SEM/Screenshot%202025-11-12%20170729.png
+ `README.md`
+ `pipeline.py` — orchestrator (generates stego for configured methods/payloads, runs zsteg/stegsecret/stegdetect, writes merged results)
+ `config.yaml` — list of payloads, paths, which tools to run
+ `report.md`
+Provide `pipeline.py` that uses subprocess to invoke the per-lab scripts and collates outputs.
+# Lab 5 — Metrics & Statistical Comparison
+
+Objective:compute TPR/FPR, ROC, AUC (when scores available), and run McNemar's test for paired detectors.
+Files:
+ `README.md`
+ `evaluate.py` — compute metrics and produce plots (matplotlib)
+ `mcnemar_test.py` — run McNemar on paired detectors and print p-value
+ `report.md`
+Key code: `evaluate.py` merges detection CSV with truth CSV and prints table of metrics per tool/payload and a consolidated ROC plot.
+# Lab 6 — Mini Project: Add Modern ML Detector
+
+Objective: implement a small CNN or SRM+random-forest detector, train on small subset, and compare with classic tools.
+Files:
+ `README.md` (task description — train/test split, train for few epochs)
+ `train_detector.py` — quick CNN or SRM+RF pipeline (keeps model small so it trains fast)
+ `predict_detector.py` — run detector on test images and produce CSV
+ `report.md`
+
+This lab is open-ended; students may run a lightweight CNN (e.g., a few conv layers) or use extracted residual features and a classical classifier.
+ Instructor notes
+ Each lab includes `report.md` template and expected sample outputs in `examples/` (small set) so instructors can validate student runs.
+ Tests/CI: instructors can add GitHub Actions to run a smoke test on push (e.g., run a small end-to-end pipeline on 5 images).
+ Docker: the root Dockerfile installs ruby (zsteg) and Java runtime; students must download `StegSecret.jar` into `/opt/StegSecret.jar` inside the container (automated instructions in `data/README.md`).
+https://github.com/dhanushmurali27-creator/Digital-Forensic-Lab-Exercises/blob/main/images/DF%20END%20SEM/Screenshot%202025-11-12%20170620.png
